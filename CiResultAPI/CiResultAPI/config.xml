@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <!-- Files extension for search -->
+    <add key="FilesExtension" value="trx" />
+    <!-- Path to test results folder -->
+    <add key="TestResultsDir" value="C:\tmp" />
+    <add key="TfsUrl" value ="http://clttfs05.camstar.local:8080/camstarcollection"/>
+    <add key="ReportFolder" value="C:\CI_Reports" />
+    <add key="SupportedBrowsers" value="Chrome, IE"/>
+    <add key="SupportedThemes" value="Horizon, Classic, Mobile"/>
+    <add key="SupportedDataBases" value="mssql, Oracle"/>
+  </appSettings>
+</configuration>

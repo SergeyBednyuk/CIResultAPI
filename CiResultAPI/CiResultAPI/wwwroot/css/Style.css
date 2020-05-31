@@ -1,0 +1,14 @@
+﻿body {
+    margin: 5px;
+    margin-top: 10px;
+}
+
+#table-results {
+    width: 90%;
+    height: 400px;
+    overflow: auto;
+}
+
+.bttn{
+    border: 1px solid black;
+}
