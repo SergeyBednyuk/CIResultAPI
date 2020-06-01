@@ -8,6 +8,7 @@ using CiResultAPI.Models.DbContexts;
 using CiResultAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,7 @@ namespace CiResultAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //TODO as config property
             string connectionString = "Server=VM-VDIP15-32\\VDIVMDB;Database=TrxResultsDB;Trusted_Connection=True;MultipleActiveResultSets=true";
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -47,9 +49,18 @@ namespace CiResultAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler(appBuilder => {
+                    appBuilder.Run(async context => {
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync("Some error on server side");
+                    });
+                });
+            }
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>

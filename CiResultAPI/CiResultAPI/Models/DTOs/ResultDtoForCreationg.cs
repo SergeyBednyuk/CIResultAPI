@@ -20,8 +20,6 @@ namespace CiResultAPI.Models.DTOs
         public int Skipped { get; set; }
         public string ErrorMessage { get; set; }
         public string NameOfVirtualMachine { get; set; }
-        //
-        public virtual int FeatureId { get; set; }
-        public virtual int CIExecutionId { get; set; }
+        
     }
 }

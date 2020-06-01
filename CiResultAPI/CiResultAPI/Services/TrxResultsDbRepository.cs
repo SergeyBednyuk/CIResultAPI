@@ -1,4 +1,5 @@
-﻿using CiResultAPI.Models.Entities;
+﻿using CiResultAPI.Models.DbContexts;
+using CiResultAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace CiResultAPI.Services
 {
     public class TrxResultsDbRepository : ITrxResultsDbRepository
     {
-        private readonly ITrxResultsDbRepository _context;
+        private readonly TrxResultsContext _context;
 
-        public TrxResultsDbRepository(ITrxResultsDbRepository context)
+        public TrxResultsDbRepository(TrxResultsContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -30,7 +31,8 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
-        public void AddResult(Result result, int featureId, int errorImageId, int ciExecutionId)
+        //TODO ..., int featureId, int? errorImageId, int ciExecutionId) or Resource parameters?
+        public void AddResult(Result result)
         {
             throw new NotImplementedException();
         }
@@ -65,6 +67,11 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
+        public IEnumerable<CIExecution> GetCIExecutions(IEnumerable<int> ciExecutionsIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public ErrorImage GetErrorImage(int errorImageId)
         {
             throw new NotImplementedException();
@@ -75,12 +82,22 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
+        public IEnumerable<ErrorImage> GetErrorImages(IEnumerable<int> errorImagesIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public Feature GetFeature(int featureId)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<Feature> GetFeatures()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Feature> GetFeatures(IEnumerable<int> featuresIds)
         {
             throw new NotImplementedException();
         }
@@ -100,10 +117,16 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
+        public bool Save()
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateCIExecution(CIExecution ciExecution)
         {
             throw new NotImplementedException();
         }
+
         public void UpdateErrorImage(ErrorImage errorImage)
         {
             throw new NotImplementedException();
@@ -115,10 +138,6 @@ namespace CiResultAPI.Services
         }
 
         public void UpdateResult(Result result)
-        {
-            throw new NotImplementedException();
-        } 
-        public bool Save()
         {
             throw new NotImplementedException();
         }

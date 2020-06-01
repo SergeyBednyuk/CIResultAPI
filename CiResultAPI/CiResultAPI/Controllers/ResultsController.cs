@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CiResultAPI.Models;
 using CiResultAPI.Models.DbContexts;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
 using CiResultAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace CiResultAPI.Controllers
         // GET: api/<controller>
         [Route("")]
         [HttpGet]
-        public ActionResult<IEnumerable<Result>> GetAllResults()
+        public ActionResult<IEnumerable<ResultDto>> GetAllResults()
         {
             var results = _trxResultsDbRepository.GetResults();
 
@@ -42,9 +43,8 @@ namespace CiResultAPI.Controllers
         }
 
         // GET api/<controller>/5
-        [Route("[action]/{id}")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Result>> GetAuthorById(int id)
+        public ActionResult<ResultDto> GetAuthorById(int id)
         {
             var result = _trxResultsDbRepository.GetResult(id);
             if (result == null)
@@ -56,9 +56,8 @@ namespace CiResultAPI.Controllers
 
         //TODO
         // GET api/<controller>/<action>/5
-        [Route("[action]/{date}")]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Result>>> SearchByDate(string date)
+        [HttpGet("{date}")]
+        public ActionResult<IEnumerable<ResultDto>> SearchByDate(string date)
         {
             ////DateTime parsedDate = DateTime.Parse(date);
             //DateTime parsedDate = new DateTime(2020, 3, 30);
@@ -72,47 +71,46 @@ namespace CiResultAPI.Controllers
         }
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<Result> CreateResult(Result value)
+        public ActionResult<ResultDto> CreateResult(ResultDtoForCreationg result)
         {
-            if (value == null)
+            if (result == null)
             {
                 BadRequest();
             }
 
-
-            _trxResultsDbRepository.Results.Add(value);
-            await _trxResultsDbRepository.SaveChangesAsync();
+            var resultEntity = _mapper.Map<Result>(result);
+            _trxResultsDbRepository.AddResult(resultEntity);
             return Ok();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Result>> Put(int id, Result value)
+        public async Task<ActionResult<ResultDto>> Put(int id, ResultDto value)
         {
-            if (value == null)
-            {
-                BadRequest();
-            }
-            if (!_trxResultsDbRepository.Results.Any(r => r.Id == id))
-            {
-                NotFound();
-            }
-            _trxResultsDbRepository.Results.Update(value);
-            await _trxResultsDbRepository.SaveChangesAsync();
+            //if (value == null)
+            //{
+            //    BadRequest();
+            //}
+            //if (!_trxResultsDbRepository.Results.Any(r => r.Id == id))
+            //{
+            //    NotFound();
+            //}
+            //_trxResultsDbRepository.Results.Update(value);
+            //await _trxResultsDbRepository.SaveChangesAsync();
             return Ok();
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Result>> Delete(int id)
+        public async Task<ActionResult<ResultDto>> Delete(int id)
         {
-            Result result = await _trxResultsDbRepository.Results.FirstOrDefaultAsync(i => i.Id == id);
-            if (result == null)
-            {
-                NotFound();
-            }
-            _trxResultsDbRepository.Results.Remove(result);
-            await _trxResultsDbRepository.SaveChangesAsync();
+            //Result result = await _trxResultsDbRepository.Results.FirstOrDefaultAsync(i => i.Id == id);
+            //if (result == null)
+            //{
+            //    NotFound();
+            //}
+            //_trxResultsDbRepository.Results.Remove(result);
+            //await _trxResultsDbRepository.SaveChangesAsync();
             return Ok();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CiResultAPI.Models;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
 using CiResultAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace CiResultAPI.Controllers
 {
     [ApiController]
-    [Route("api/result")]
+    [Route("api/resultscollection")]
     public class ResultsCollectionController : Controller
     {
         private readonly ITrxResultsDbRepository _trxResultsDbRepository;
@@ -39,6 +40,23 @@ namespace CiResultAPI.Controllers
             }
 
             return Ok(_mapper.Map<IEnumerable<ResultDto>>(results));
+        }
+
+        //TODO? add support 201 Created status
+        [HttpPost]
+        public ActionResult CreateResultsCollection(IEnumerable<ResultDtoForCreationg> resultsCollection)
+        {
+            var results = _mapper.Map<IEnumerable<Result>>(resultsCollection);
+
+            foreach (var result in results)
+            {
+                _trxResultsDbRepository.AddResult(result);
+            }
+
+            _trxResultsDbRepository.Save();
+
+            return Ok();
+            //return CreatedAtRoute();
         }
     }
 }
