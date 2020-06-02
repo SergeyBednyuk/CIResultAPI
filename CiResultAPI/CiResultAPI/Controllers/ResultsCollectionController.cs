@@ -46,13 +46,16 @@ namespace CiResultAPI.Controllers
         [HttpPost]
         public ActionResult CreateResultsCollection(IEnumerable<ResultDtoForCreationg> resultsCollection)
         {
-            var results = _mapper.Map<IEnumerable<Result>>(resultsCollection);
+            if (resultsCollection == null)
+            {
+                return BadRequest();
+            }
 
+            var results = _mapper.Map<IEnumerable<Result>>(resultsCollection);
             foreach (var result in results)
             {
                 _trxResultsDbRepository.AddResult(result);
             }
-
             _trxResultsDbRepository.Save();
 
             return Ok();

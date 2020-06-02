@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CiResultAPI.Models;
 using CiResultAPI.Models.DbContexts;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
+using CiResultAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,75 +16,89 @@ using Microsoft.EntityFrameworkCore;
 namespace CiResultAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/errorimages")]
     public class ErrorImagesController : Controller
     {
-        private TrxResultsContext _db;
-        public ErrorImagesController(TrxResultsContext db)
+        private readonly ITrxResultsDbRepository _trxResultsDbRepository;
+        private readonly IMapper _mapper;
+
+
+        public ErrorImagesController(ITrxResultsDbRepository trxResultsDbRepository, IMapper mapper)
         {
-            _db = db;
+            _trxResultsDbRepository = trxResultsDbRepository ?? throw new ArgumentException(nameof(trxResultsDbRepository));
+            _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
         // GET: api/<controller>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ErrorImage>>> Get()
+        public ActionResult<IEnumerable<ErrorImage>> GetAllErrorImages()
         {
-            return await _db.ErrorImages.ToListAsync();
+            var errorimages = _trxResultsDbRepository.GetErrorImages();
+            if (errorimages == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<ErrorImageDto>>(errorimages));
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ErrorImage>> Get(int id)
+        public  ActionResult<ErrorImage> GetErrorImageById(int id)
         {
-            ErrorImage errorImage = await _db.ErrorImages.FirstOrDefaultAsync(i => i.Id == id);
+            var errorImage = _trxResultsDbRepository.GetErrorImage(id);
             if (errorImage == null)
             {
                 NotFound();
             }
-            return errorImage;
+            return Ok(_mapper.Map<ErrorImageDto>(errorImage));
         }
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<ActionResult<ErrorImage>> Post(ErrorImage value)
+        public ActionResult<ErrorImage> CreateErrorImage(ErrorImageDtoForCreationg errorImage)
         {
-            if (value == null)
+            if (errorImage == null)
             {
                 BadRequest();
             }
-            _db.ErrorImages.Add(value);
-            await _db.SaveChangesAsync();
-            return Ok();
+
+            var errorImageEntity = _mapper.Map<ErrorImage>(errorImage);
+            _trxResultsDbRepository.AddErrorImage(errorImageEntity);
+            _trxResultsDbRepository.Save();
+            //DOTO ????
+            //return Created();
+            return Ok(_mapper.Map<ErrorImageDto>(errorImageEntity));
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ErrorImage>> Put(int id, ErrorImage value)
+        public ActionResult<ErrorImage> Put(int id, ErrorImage value)
         {
-            if (value == null)
-            {
-                BadRequest();
-            }
-            if (!_db.ErrorImages.Any(i => i.Id == id))
-            {
-                NotFound();
-            }
-            _db.ErrorImages.Update(value);
-            await _db.SaveChangesAsync();
+            //if (value == null)
+            //{
+            //    BadRequest();
+            //}
+            //if (!_db.ErrorImages.Any(i => i.Id == id))
+            //{
+            //    NotFound();
+            //}
+            //_db.ErrorImages.Update(value);
+            //await _db.SaveChangesAsync();
             return Ok();
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ErrorImage>> Delete(int id)
+        public  ActionResult<ErrorImage> Delete(int id)
         {
-            ErrorImage errorImage = await _db.ErrorImages.FirstOrDefaultAsync(i => i.Id == id);
-            if (errorImage == null)
-            {
-                NotFound();
-            }
-            _db.ErrorImages.Remove(errorImage);
-            await _db.SaveChangesAsync();
+            //ErrorImage errorImage = await _db.ErrorImages.FirstOrDefaultAsync(i => i.Id == id);
+            //if (errorImage == null)
+            //{
+            //    NotFound();
+            //}
+            //_db.ErrorImages.Remove(errorImage);
+            //await _db.SaveChangesAsync();
             return Ok();
         }
     }

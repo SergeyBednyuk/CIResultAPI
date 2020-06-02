@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CiResultAPI.Models;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
 using CiResultAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,25 @@ namespace CiResultAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<FeatureDto>(features));
+            return Ok(_mapper.Map<IEnumerable<FeatureDto>>(features));
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<FeatureDto>> CreateFeaturesCollection(IEnumerable<FeatureDtoForCreating> featuresCollection)
+        {
+            if (featuresCollection == null)
+            {
+                return BadRequest();
+            }
+
+            var features = _mapper.Map<IEnumerable<Feature>>(featuresCollection);
+            foreach (var feature in features)
+            {
+                _trxResultsDbRepository.AddFeature(feature);
+            }
+            _trxResultsDbRepository.Save();
+
+            return Ok();
         }
     }
 }

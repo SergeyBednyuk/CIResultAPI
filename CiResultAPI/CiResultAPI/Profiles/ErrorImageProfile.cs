@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CiResultAPI.Models;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace CiResultAPI.Profiles
         public ErrorImageProfile()
         {
             CreateMap<ErrorImage, ErrorImageDto>();
+            CreateMap<ErrorImageDtoForCreationg, ErrorImage>();
         }
     }
 }
