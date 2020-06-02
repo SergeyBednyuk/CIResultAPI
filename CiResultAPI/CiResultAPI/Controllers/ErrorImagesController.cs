@@ -22,7 +22,6 @@ namespace CiResultAPI.Controllers
         private readonly ITrxResultsDbRepository _trxResultsDbRepository;
         private readonly IMapper _mapper;
 
-
         public ErrorImagesController(ITrxResultsDbRepository trxResultsDbRepository, IMapper mapper)
         {
             _trxResultsDbRepository = trxResultsDbRepository ?? throw new ArgumentException(nameof(trxResultsDbRepository));
@@ -44,7 +43,7 @@ namespace CiResultAPI.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public  ActionResult<ErrorImage> GetErrorImageById(int id)
+        public ActionResult<ErrorImage> GetErrorImageById(int id)
         {
             var errorImage = _trxResultsDbRepository.GetErrorImage(id);
             if (errorImage == null)
@@ -90,7 +89,7 @@ namespace CiResultAPI.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public  ActionResult<ErrorImage> Delete(int id)
+        public ActionResult<ErrorImage> Delete(int id)
         {
             //ErrorImage errorImage = await _db.ErrorImages.FirstOrDefaultAsync(i => i.Id == id);
             //if (errorImage == null)

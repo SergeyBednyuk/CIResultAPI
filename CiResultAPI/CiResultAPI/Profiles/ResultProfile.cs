@@ -14,7 +14,7 @@ namespace CiResultAPI.Profiles
         public ResultProfile()
         {
             CreateMap<Result, ResultDto>();
-            CreateMap<ResultDtoForCreationg, Result>();
+            CreateMap<ResultDtoForCreating, Result>();
         }
     }
 }

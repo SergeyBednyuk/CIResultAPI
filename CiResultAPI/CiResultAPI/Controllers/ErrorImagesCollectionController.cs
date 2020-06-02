@@ -14,7 +14,7 @@ namespace CiResultAPI.Controllers
 {
     [ApiController]
     [Route("api/errorimagescollection")]
-    public class ErrorImagesCollectionController: Controller
+    public class ErrorImagesCollectionController : Controller
     {
         private readonly ITrxResultsDbRepository _trxResultsDbRepository;
         private readonly IMapper _mapper;
@@ -56,7 +56,6 @@ namespace CiResultAPI.Controllers
                 _trxResultsDbRepository.AddErrorImage(errorImage);
             }
             _trxResultsDbRepository.Save();
-
 
             return Ok();
         }

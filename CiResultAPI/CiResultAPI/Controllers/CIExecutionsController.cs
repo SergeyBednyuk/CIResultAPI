@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CiResultAPI.Models;
 using CiResultAPI.Models.DbContexts;
+using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
+using CiResultAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,76 +16,71 @@ using Microsoft.EntityFrameworkCore;
 namespace CiResultAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/ciexecutions")]
     public class CIExecutionsController : Controller
     {
-        private TrxResultsContext _db;
-        public CIExecutionsController(TrxResultsContext db)
+        private readonly ITrxResultsDbRepository _trxResultsDbRepository;
+        private readonly IMapper _mapper;
+
+        public CIExecutionsController(ITrxResultsDbRepository trxResultsDbRepository, IMapper mapper)
         {
-            _db = db;
+            _trxResultsDbRepository = trxResultsDbRepository ?? throw new ArgumentException(nameof(trxResultsDbRepository));
+            _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
         // GET: api/<controller>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CIExecution>>> Get()
+        public ActionResult<IEnumerable<CIExecutionDto>> GetAllCIExecutions()
         {
-            return await _db.CIExecutions.ToListAsync();
+            var ciExecutions = _trxResultsDbRepository.GetCIExecutions();
+            if (ciExecutions == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<CIExecutionDto>>(ciExecutions));
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CIExecution>> Get(int id)
+        public ActionResult<CIExecutionDto> Get(int id)
         {
-            CIExecution cIExecution = await _db.CIExecutions.FirstOrDefaultAsync(f => f.Id == id);
+            var cIExecution = _trxResultsDbRepository.GetCIExecution(id);
             if (cIExecution == null)
             {
                 return NotFound();
             }
-            return cIExecution;
+            return Ok(_mapper.Map<CIExecutionDto>(cIExecution));
         }
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<ActionResult<CIExecution>> Post(CIExecution value)
+        public ActionResult<CIExecutionDto> CreateCIExecution(CIExecutionDtoForCreatting cIExecution)
         {
-            if (value == null)
+            if (cIExecution == null)
             {
                 BadRequest();
             }
-            _db.CIExecutions.Add(value);
-            await _db.SaveChangesAsync();
+            var ciExecutionEntity = _mapper.Map<CIExecution>(cIExecution);
+            _trxResultsDbRepository.AddCIExecution(ciExecutionEntity);
+            _trxResultsDbRepository.Save();
+            //TODO HTTP 201 created?
             return Ok();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<CIExecution>> Put(int id, CIExecution value)
+        public ActionResult<CIExecutionDto> Put(int id, CIExecution value)
         {
 
-            if (value == null)
-            {
-                BadRequest();
-            }
-            if (!_db.CIExecutions.Any(f => f.Id == id))
-            {
-                return NotFound();
-            }
-            _db.CIExecutions.Update(value);
-            await _db.SaveChangesAsync();
             return Ok();
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Feature>> Delete(int id)
+        public  ActionResult<CIExecutionDto> Delete(int id)
         {
-            CIExecution cIExecution = await _db.CIExecutions.FirstOrDefaultAsync(f => f.Id == id);
-            if (cIExecution == null)
-            {
-                NotFound();
-            }
-            _db.CIExecutions.Remove(cIExecution);
-            await _db.SaveChangesAsync();
+           
             return Ok();
         }
     }

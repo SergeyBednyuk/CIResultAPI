@@ -44,7 +44,7 @@ namespace CiResultAPI.Controllers
 
         //TODO? add support 201 Created status
         [HttpPost]
-        public ActionResult CreateResultsCollection(IEnumerable<ResultDtoForCreationg> resultsCollection)
+        public ActionResult CreateResultsCollection(IEnumerable<ResultDtoForCreating> resultsCollection)
         {
             if (resultsCollection == null)
             {

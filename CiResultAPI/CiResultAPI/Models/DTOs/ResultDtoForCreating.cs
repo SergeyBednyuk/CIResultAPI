@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CiResultAPI.Models.DTOs
 {
-    public class ResultDtoForCreationg
+    public class ResultDtoForCreating
     {
         //TODO change model for creationg?
         public string FullName { get; set; }

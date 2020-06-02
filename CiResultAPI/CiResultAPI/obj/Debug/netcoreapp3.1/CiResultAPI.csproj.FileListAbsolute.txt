@@ -338,4 +338,3 @@ C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\staticwebass
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.dll
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.pdb
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.genruntimeconfig.cache
-C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.csprojAssemblyReference.cache

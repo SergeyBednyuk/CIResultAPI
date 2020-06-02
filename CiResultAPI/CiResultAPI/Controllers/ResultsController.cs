@@ -71,7 +71,7 @@ namespace CiResultAPI.Controllers
         }
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<ResultDto> CreateResult(ResultDtoForCreationg result)
+        public ActionResult<ResultDto> CreateResult(ResultDtoForCreating result)
         {
             if (result == null)
             {
