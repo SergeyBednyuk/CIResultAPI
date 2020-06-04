@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace CiResultAPI.Models.DTOs
 {
-    public class FeatureDtoForCreating
+    public class ErrorImageForUpdatingDto
     {
-        public string Name { get; set; }        
+        public byte[] ImageOfError { get; set; }
+        public string Name { get; set; }
     }
 }

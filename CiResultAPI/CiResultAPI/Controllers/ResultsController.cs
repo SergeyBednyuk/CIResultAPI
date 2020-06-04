@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using AutoMapper;
 using CiResultAPI.Models;
 using CiResultAPI.Models.DbContexts;
 using CiResultAPI.Models.DTOs;
 using CiResultAPI.Models.Entities;
 using CiResultAPI.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +30,6 @@ namespace CiResultAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         // GET: api/<controller>
-        [Route("")]
         [HttpGet]
         public ActionResult<IEnumerable<ResultDto>> GetAllResults()
         {
@@ -39,14 +40,14 @@ namespace CiResultAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<ResultDto>(results));
+            return Ok(_mapper.Map<IEnumerable<ResultDto>>(results));
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public ActionResult<ResultDto> GetAuthorById(int id)
+        [HttpGet("{resultId}", Name = "GetAuthorById")]
+        public ActionResult<ResultDto> GetAuthorById(int resultId)
         {
-            var result = _trxResultsDbRepository.GetResult(id);
+            var result = _trxResultsDbRepository.GetResult(resultId);
             if (result == null)
             {
                 NotFound();
@@ -54,7 +55,7 @@ namespace CiResultAPI.Controllers
             return Ok(_mapper.Map<ResultDto>(result));
         }
 
-        //TODO
+        //TODO ?
         // GET api/<controller>/<action>/5
         [HttpGet("{date}")]
         public ActionResult<IEnumerable<ResultDto>> SearchByDate(string date)
@@ -66,12 +67,13 @@ namespace CiResultAPI.Controllers
             //                             select r;
             //var resultsByDate = await results.Where(r => r.Date.Date.CompareTo(parsedDate.Date) == 0).ToListAsync();
 
-            return NotFound();
+            throw new NotImplementedException();
+            //return Ok();
 
         }
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<ResultDto> CreateResult(ResultDtoForCreating result)
+        public ActionResult<ResultDto> CreateResult(ResultForCreatingDto result)
         {
             if (result == null)
             {
@@ -80,38 +82,72 @@ namespace CiResultAPI.Controllers
 
             var resultEntity = _mapper.Map<Result>(result);
             _trxResultsDbRepository.AddResult(resultEntity);
-            return Ok();
+            _trxResultsDbRepository.Save();
+
+            var resultDto = _mapper.Map<ResultDto>(resultEntity);
+            return CreatedAtRoute("GetAuthorById", new { resultId = resultEntity.Id }, resultDto);
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ResultDto>> Put(int id, ResultDto value)
+        [HttpPut("{resultId}")]
+        public ActionResult UpdateResult(int resultId, ResultForUpdatingDto result)
         {
-            //if (value == null)
-            //{
-            //    BadRequest();
-            //}
-            //if (!_trxResultsDbRepository.Results.Any(r => r.Id == id))
-            //{
-            //    NotFound();
-            //}
-            //_trxResultsDbRepository.Results.Update(value);
-            //await _trxResultsDbRepository.SaveChangesAsync();
-            return Ok();
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return NotFound();
+            }
+
+            var resultFromRepo = _trxResultsDbRepository.GetResult(resultId);
+
+            _mapper.Map(resultFromRepo, result);
+
+            _trxResultsDbRepository.UpdateResult(resultFromRepo);
+            _trxResultsDbRepository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{resultId}")]
+        public ActionResult PartialUpdateOfResult(int resultId, [FromBody]JsonPatchDocument<ResultForUpdatingDto> patchDocument)
+        {
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return NotFound();
+            }
+
+            var resultFromRepo = _trxResultsDbRepository.GetResult(resultId);
+            var resultToPatch = _mapper.Map<ResultForUpdatingDto>(resultFromRepo);
+
+            patchDocument.ApplyTo(resultToPatch);
+
+            if (!TryValidateModel(resultToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(resultFromRepo, resultToPatch);
+
+            //TODO ?
+            //_trxResultsDbRepository.UpdateResult(resultFromRepo);
+            _trxResultsDbRepository.Save();
+
+            return NoContent();
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ResultDto>> Delete(int id)
+        [HttpDelete("{resultId}")]
+        public ActionResult DeleteResult(int resultId)
         {
-            //Result result = await _trxResultsDbRepository.Results.FirstOrDefaultAsync(i => i.Id == id);
-            //if (result == null)
-            //{
-            //    NotFound();
-            //}
-            //_trxResultsDbRepository.Results.Remove(result);
-            //await _trxResultsDbRepository.SaveChangesAsync();
-            return Ok();
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return NotFound();
+            }
+
+            var resultFromRepo = _trxResultsDbRepository.GetResult(resultId);
+            _trxResultsDbRepository.DeleteResult(resultFromRepo);
+            _trxResultsDbRepository.Save();
+
+            return NoContent();
         }
     }
 }

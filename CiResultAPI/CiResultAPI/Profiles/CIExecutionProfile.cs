@@ -14,7 +14,7 @@ namespace CiResultAPI.Profiles
         public CIExecutionProfile()
         {
             CreateMap<CIExecution, CIExecutionDto>();
-            CreateMap<CIExecutionDtoForCreatting, CIExecutionDto>();
+            CreateMap<CIExecutionForCreattingDto, CIExecutionDto>();
         }
     }
 }

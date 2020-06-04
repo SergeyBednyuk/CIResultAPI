@@ -25,7 +25,7 @@ namespace CiResultAPI.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
-        [HttpGet]
+        [HttpGet("{errorImagesIds}")]
         public ActionResult<IEnumerable<ErrorImageDto>> GetErrorImagesCollection(IEnumerable<int> errorImagesIds)
         {
             if (errorImagesIds == null)
@@ -42,18 +42,23 @@ namespace CiResultAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<ErrorImageDto>>(errorImages));
         }
 
-        [HttpPost]
-        public ActionResult<IEnumerable<ErrorImageDto>> CreateErrorImagesCollection(IEnumerable<ErrorImageDtoForCreationg> errorImagesCollection)
+        [HttpPost("{resultId}")]
+        public ActionResult<IEnumerable<ErrorImageDto>> CreateErrorImagesCollection(int resultId,[FromBody] IEnumerable<ErrorImageForCreationgDto> errorImagesCollection)
         {
             if (errorImagesCollection == null)
             {
                 return BadRequest();
             }
 
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return NotFound();
+            }
+
             var errorImages = _mapper.Map<IEnumerable<ErrorImage>>(errorImagesCollection);
             foreach (var errorImage in errorImages)
             {
-                _trxResultsDbRepository.AddErrorImage(errorImage);
+                _trxResultsDbRepository.AddErrorImage(resultId, errorImage);
             }
             _trxResultsDbRepository.Save();
 

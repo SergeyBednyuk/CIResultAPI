@@ -21,7 +21,7 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
-        public void AddErrorImage(ErrorImage errorImage)
+        public void AddErrorImage(int resultId, ErrorImage errorImage)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +34,12 @@ namespace CiResultAPI.Services
         //TODO ..., int featureId, int? errorImageId, int ciExecutionId) or Resource parameters?
         public void AddResult(Result result)
         {
-            throw new NotImplementedException();
+            if (result == null)
+            {
+                throw new ArgumentException(nameof(result));
+            }
+
+            _context.Results.Add(result);
         }
 
         public void DeleteCIExecution(CIExecution ciExecution)
@@ -54,7 +59,12 @@ namespace CiResultAPI.Services
 
         public void DeleteResult(Result result)
         {
-            throw new NotImplementedException();
+            if (result == null)
+            {
+                throw new ArgumentException(nameof(result));
+            }
+
+            _context.Results.Remove(result);
         }
 
         public CIExecution GetCIExecution(int ciExecutionId)
@@ -83,6 +93,11 @@ namespace CiResultAPI.Services
         }
 
         public IEnumerable<ErrorImage> GetErrorImages(IEnumerable<int> errorImagesIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ErrorImage> GetErrorImages(int resultId)
         {
             throw new NotImplementedException();
         }
@@ -117,9 +132,14 @@ namespace CiResultAPI.Services
             throw new NotImplementedException();
         }
 
-        public bool Save()
+        public bool ResultExist(int resultId)
         {
             throw new NotImplementedException();
+        }
+
+        public bool Save()
+        {
+            return (_context.SaveChanges() >= 0);
         }
 
         public void UpdateCIExecution(CIExecution ciExecution)

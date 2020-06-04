@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CiResultAPI.Models.DbContexts
 {
-    public class TrxResultsContext :DbContext
+    public class TrxResultsContext : DbContext
     {
         public TrxResultsContext(DbContextOptions<TrxResultsContext> options)
             : base(options)

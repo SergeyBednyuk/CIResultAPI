@@ -327,8 +327,6 @@ C:\work\CiResultAPI\CiResultAPI\CiResultAPI\bin\Debug\netcoreapp3.1\runtimes\win
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.csproj.CoreCompileInputs.cache
-C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.AssemblyInfoInputs.cache
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.AssemblyInfo.cs
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.RazorTargetAssemblyInfo.cache
@@ -338,3 +336,4 @@ C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\staticwebass
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.dll
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.pdb
 C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.genruntimeconfig.cache
+C:\work\CiResultAPI\CiResultAPI\CiResultAPI\obj\Debug\netcoreapp3.1\CiResultAPI.csprojAssemblyReference.cache

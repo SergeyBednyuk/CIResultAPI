@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CiResultAPI.Controllers
 {
     [ApiController]
-    [Route("api/errorimages")]
+    [Route("api/results/{resultId}/errorimages")]
     public class ErrorImagesController : Controller
     {
         private readonly ITrxResultsDbRepository _trxResultsDbRepository;
@@ -30,9 +30,14 @@ namespace CiResultAPI.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public ActionResult<IEnumerable<ErrorImage>> GetAllErrorImages()
+        public ActionResult<IEnumerable<ErrorImage>> GetAllErrorImagesForResult(int resultId)
         {
-            var errorimages = _trxResultsDbRepository.GetErrorImages();
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return BadRequest();
+            }
+
+            var errorimages = _trxResultsDbRepository.GetErrorImages(resultId);
             if (errorimages == null)
             {
                 return BadRequest();
@@ -42,10 +47,10 @@ namespace CiResultAPI.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public ActionResult<ErrorImage> GetErrorImageById(int id)
+        [HttpGet("{errorImageId}", Name = "GetErrorImageById")]
+        public ActionResult<ErrorImage> GetErrorImageById(int errorImageId)
         {
-            var errorImage = _trxResultsDbRepository.GetErrorImage(id);
+            var errorImage = _trxResultsDbRepository.GetErrorImage(errorImageId);
             if (errorImage == null)
             {
                 NotFound();
@@ -55,50 +60,62 @@ namespace CiResultAPI.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<ErrorImage> CreateErrorImage(ErrorImageDtoForCreationg errorImage)
+        public ActionResult<ErrorImage> CreateErrorImage(int resultId, ErrorImageForCreationgDto errorImage)
         {
+            if (!_trxResultsDbRepository.ResultExist(resultId))
+            {
+                return NotFound();
+            }
+
             if (errorImage == null)
             {
-                BadRequest();
+                return BadRequest();
             }
 
             var errorImageEntity = _mapper.Map<ErrorImage>(errorImage);
-            _trxResultsDbRepository.AddErrorImage(errorImageEntity);
+
+            _trxResultsDbRepository.AddErrorImage(resultId, errorImageEntity);
             _trxResultsDbRepository.Save();
-            //DOTO ????
-            //return Created();
-            return Ok(_mapper.Map<ErrorImageDto>(errorImageEntity));
+
+            var errorimageDto = _mapper.Map<ErrorImageDto>(errorImageEntity);
+
+            return CreatedAtRoute("GetErrorImageById", new { errorImageId = errorImageEntity.Id }, errorimageDto);
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public ActionResult<ErrorImage> Put(int id, ErrorImage value)
+        [HttpPut("{errorImageId}")]
+        public ActionResult UpdateErrorImage(int errorImageId, ErrorImageForUpdatingDto errorImage)
         {
-            //if (value == null)
-            //{
-            //    BadRequest();
-            //}
-            //if (!_db.ErrorImages.Any(i => i.Id == id))
-            //{
-            //    NotFound();
-            //}
-            //_db.ErrorImages.Update(value);
-            //await _db.SaveChangesAsync();
-            return Ok();
+            var errorImageFromRepo = _trxResultsDbRepository.GetErrorImage(errorImageId);
+
+            if (errorImageFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(errorImageFromRepo, errorImage);
+
+            _trxResultsDbRepository.UpdateErrorImage(errorImageFromRepo);
+            _trxResultsDbRepository.Save();
+
+            return NoContent();
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public ActionResult<ErrorImage> Delete(int id)
+        [HttpDelete("{errorImageId}")]
+        public ActionResult Delete(int errorImageId)
         {
-            //ErrorImage errorImage = await _db.ErrorImages.FirstOrDefaultAsync(i => i.Id == id);
-            //if (errorImage == null)
-            //{
-            //    NotFound();
-            //}
-            //_db.ErrorImages.Remove(errorImage);
-            //await _db.SaveChangesAsync();
-            return Ok();
+            var errorImageFromRepo = _trxResultsDbRepository.GetErrorImage(errorImageId);
+
+            if (errorImageFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _trxResultsDbRepository.DeleteErrorImage(errorImageFromRepo);
+            _trxResultsDbRepository.Save();
+
+            return NoContent();
         }
     }
 }

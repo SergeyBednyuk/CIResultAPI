@@ -14,7 +14,7 @@ namespace CiResultAPI.Profiles
         public FeatureProfile()
         {
             CreateMap<Feature, FeatureDto>();
-            CreateMap<FeatureDtoForCreating, Feature>();
+            CreateMap<FeatureForCreatingDto, Feature>();
         }
     }
 }

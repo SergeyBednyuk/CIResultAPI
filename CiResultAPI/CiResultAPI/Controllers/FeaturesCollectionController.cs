@@ -43,7 +43,7 @@ namespace CiResultAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<FeatureDto>> CreateFeaturesCollection(IEnumerable<FeatureDtoForCreating> featuresCollection)
+        public ActionResult<IEnumerable<FeatureDto>> CreateFeaturesCollection(IEnumerable<FeatureForCreatingDto> featuresCollection)
         {
             if (featuresCollection == null)
             {

@@ -56,7 +56,7 @@ namespace CiResultAPI.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<FeatureDto> CreateFeature(FeatureDtoForCreating feature)
+        public ActionResult<FeatureDto> CreateFeature(FeatureForCreatingDto feature)
         {
             if (feature == null)
             {

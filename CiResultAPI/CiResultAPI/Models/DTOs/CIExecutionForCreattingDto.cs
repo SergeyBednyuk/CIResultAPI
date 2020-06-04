@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CiResultAPI.Models.DTOs
 {
-    public class CIExecutionDtoForCreatting
+    public class CIExecutionForCreattingDto
     {
         public string DbType { get; set; }
         public string BrowserType { get; set; }

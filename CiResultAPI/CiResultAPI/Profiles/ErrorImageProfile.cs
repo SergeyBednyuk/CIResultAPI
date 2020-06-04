@@ -14,7 +14,8 @@ namespace CiResultAPI.Profiles
         public ErrorImageProfile()
         {
             CreateMap<ErrorImage, ErrorImageDto>();
-            CreateMap<ErrorImageDtoForCreationg, ErrorImage>();
+            CreateMap<ErrorImageForCreationgDto, ErrorImage>();
+            CreateMap<ErrorImageForUpdatingDto, ErrorImage>();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CiResultAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetResultsCollection")]
         public ActionResult GetResultsCollection(IEnumerable<int> resultsIds)
         {
             if (resultsIds == null)
@@ -44,7 +44,7 @@ namespace CiResultAPI.Controllers
 
         //TODO? add support 201 Created status
         [HttpPost]
-        public ActionResult CreateResultsCollection(IEnumerable<ResultDtoForCreating> resultsCollection)
+        public ActionResult CreateResultsCollection(IEnumerable<ResultForCreatingDto> resultsCollection)
         {
             if (resultsCollection == null)
             {
@@ -58,8 +58,11 @@ namespace CiResultAPI.Controllers
             }
             _trxResultsDbRepository.Save();
 
-            return Ok();
-            //return CreatedAtRoute();
+            var resultsCollectionDto = _mapper.Map<IEnumerable<ResultDto>>(results);
+            var ids = string.Join(",", results.Select(a => a.Id));
+
+            //return Ok();
+            return CreatedAtRoute("GetResultsCollection", new { resultsIds = ids }, resultsCollectionDto);
         }
     }
 }

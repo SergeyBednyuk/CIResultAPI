@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CiResultAPI.Models.DTOs
 {
-    public class ErrorImageDtoForCreationg
+    public class ErrorImageForCreationgDto
     {
         public byte[] ImageOfError { get; set; }
         public string Name { get; set; }

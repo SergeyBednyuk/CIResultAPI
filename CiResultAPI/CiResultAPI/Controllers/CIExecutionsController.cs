@@ -55,7 +55,7 @@ namespace CiResultAPI.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<CIExecutionDto> CreateCIExecution(CIExecutionDtoForCreatting cIExecution)
+        public ActionResult<CIExecutionDto> CreateCIExecution(CIExecutionForCreattingDto cIExecution)
         {
             if (cIExecution == null)
             {

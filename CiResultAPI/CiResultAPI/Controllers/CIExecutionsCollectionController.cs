@@ -42,7 +42,7 @@ namespace CiResultAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<CIExecutionDto>> CreateCIExecutionsCollection(IEnumerable<CIExecutionDtoForCreatting> ciExecutionsCollection)
+        public ActionResult<IEnumerable<CIExecutionDto>> CreateCIExecutionsCollection(IEnumerable<CIExecutionForCreattingDto> ciExecutionsCollection)
         {
             if (ciExecutionsCollection == null)
             {
